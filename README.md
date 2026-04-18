@@ -1,6 +1,6 @@
 # LegONet: Plug-and-Play Structure-Preserving Neural Operator Blocks for Compositional PDE Learning
 
-[![Paper](https://img.shields.io/badge/paper-arXiv-red)](YOUR_ARXIV_LINK)
+[![Paper](https://img.shields.io/badge/paper-arXiv-red)]([YOUR_ARXIV_LINK](https://arxiv.org/abs/2603.07882))
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/)
 
