@@ -1,0 +1,25 @@
+{
+  "block": "Laplace2D",
+  "model": "diag",
+  "fft_norm": "ortho",
+  "domain": "[0,2\u03c0)^2 periodic",
+  "dealiasing": "2/3 law + Kmax cap",
+  "N": 64,
+  "Kmax": 21,
+  "Kcut": 21,
+  "dim": 1849,
+  "alpha": 0.5,
+  "amp": 1.0,
+  "scale": 882.0,
+  "dtype": "float32",
+  "best_epoch": 6,
+  "best_test_rel_l2": 8.282908225965002e-08,
+  "early_stop": false,
+  "early_stop_tol": 1e-06,
+  "early_stop_patience": 5,
+  "early_stop_patience_no_improve": 30,
+  "diag": {
+    "init": "rand",
+    "init_scale": 1.0
+  }
+}
