@@ -1,0 +1,12 @@
+# LegONet — Python dependencies
+# Install with:  pip install -r requirements.txt
+# Or use the provided environment.yml with conda.
+
+# Core deep learning
+torch>=2.0.0          # GPU-accelerated tensor operations and autograd
+
+# Numerical computing
+numpy>=1.24.0         # Array operations and Gauss–Legendre quadrature
+
+# Visualization
+matplotlib>=3.7.0     # Plotting rollout snapshots, error curves, diagnostics
