@@ -1,0 +1,11 @@
+{
+  "type": "uux_hamiltonian_net",
+  "order": 96,
+  "n_points": 256,
+  "alpha": 0.5,
+  "arch": {
+    "width": 64,
+    "depth": 4,
+    "act": "gelu"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "type": "uxx_energy_net",
+  "order": 96,
+  "n_points": 256,
+  "alpha": 0.5,
+  "arch": {
+    "num_layers": 4,
+    "hidden_dim": 256
+  }
+}
