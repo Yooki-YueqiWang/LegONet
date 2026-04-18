@@ -32,12 +32,12 @@ Structure is preserved under composition: the Strang macro-step inherits the per
 LegONet/
 ├── README.md
 ├── requirements.txt
-├── environment.yml              # (provided separately)
+├── environment.yml           
 │
 ├── case1_burgers/               # Case Study I: 1D Viscous Burgers
 │   ├── train_uxx_block.py       # Train diffusion E-block (u_xx)
 │   ├── train_uux_block.py       # Train transport H-block (u u_x)
-│   ├── solve_burgers1D_2_strang.py  # Strang rollout and plots
+│   ├── solve_burgers1D.py  # Strang rollout and plots
 │   └── checkpoints/
 │       ├── uxx_block/
 │       │   └── checkpoint.pt    # Pretrained E-block weights + K_denoised
@@ -45,16 +45,14 @@ LegONet/
 │           └── checkpoint.pt    # Pretrained H-block weights
 │
 └── case2_ns/                    # Case Study II: 2D Navier–Stokes
-    ├── laplace2d_block_2.py     # Train Laplacian E-block (Δu, diagonal)
-    ├── save_fixed_poisson.py    # Save analytical Poisson inversion block
-    ├── ns2d_vorticity_with_blocks3_strang.py  # Strang rollout and plots
+    ├── laplace2d_block.py     # Train Laplacian E-block (Δu, diagonal)
+    ├── stream_block_train.py    # Train Poisson inversion block
+    ├── ns2d_vorticity_with_blocks.py  # Strang rollout and plots
     └── checkpoints/
-        ├── runs_laplace2d/
-        │   └── laplace2d_diag/
+        ├── laplace2d_diag/
         │       ├── model_state.pt
         │       └── config.json
-        └── runs_poisson2d/
-            └── poisson_fixed/
+        └── poisson2d_diag/
                 ├── model_state.pt
                 └── config.json
 ```
