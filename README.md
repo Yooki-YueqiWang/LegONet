@@ -190,7 +190,7 @@ Saves the best checkpoint (lowest test relative L² error) to `runs_poisson2d/po
 ### Step 3 — Run Strang rollout
 
 ```bash
-python ns2d_vorticity_with_blocks3_strang.py \
+python ns2d_vorticity_with_blocks.py \
     --N 64 --Kmax 21 --nu 1e-4 --dt 1e-3 --n_steps 50000 \
     --laplace_model diag \
     --poisson_model diag \
