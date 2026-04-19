@@ -212,7 +212,7 @@ The script runs both a reference trajectory (exact operators) and a learned traj
 - `history.npz` — full error array
 - `config.json` — complete run configuration
 
-**Command-line options** (key flags for `ns2d_vorticity_with_blocks3_strang.py`):
+**Command-line options** (key flags for `ns2d_vorticity_with_blocks.py`):
 
 | Flag | Default | Description |
 |------|---------|-------------|
