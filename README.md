@@ -118,7 +118,7 @@ Optimizer: AdamW (lr=1e-4, wd=1e-4), 100 epochs.
 ### Step 3 — Run Strang rollout
 
 ```bash
-python solve_burgers1D_2_strang.py
+python solve_burgers1D.py
 ```
 
 Assembles the trained blocks via symmetric Strang splitting:
@@ -140,7 +140,7 @@ Place the provided checkpoint files at:
 case1_burgers/models/uxx_block/checkpoint.pt
 case1_burgers/models/uux_block/checkpoint.pt
 ```
-Then run `solve_burgers1D_2_strang.py` directly — training is not required.
+Then run `solve_burgers1D.py` directly — training is not required.
 
 ---
 
@@ -160,7 +160,7 @@ Kolmogorov forcing: `f = 0.1(sin(2π(x+y)) + cos(2π(x+y)))`,
 
 ```bash
 cd case2_ns
-python laplace2d_block_2.py --mode train --model diag --N 64 --Kmax 21 \
+python laplace2d_block.py --mode train --model diag --N 64 --Kmax 21 \
     --scale -1 --epochs 80 --use_double
 ```
 
@@ -176,15 +176,16 @@ The script saves the best checkpoint (lowest test relative error) automatically 
 - `--model fixed` — save the exact analytical Laplacian block (no training, for reference)
 - `--model mlp` — use a full MLP energy generator (larger capacity, less interpretable)
 
-### Step 2 — Save the Poisson inversion block
+### Step 2 — Train the Poisson inversion H-block
 
-The Poisson block solves `−Δψ = ω` and uses the exact spectral formula. No training is needed:
+The Poisson block solves `−Δψ = ω` to recover the velocity field at each advection substep.
+It is parameterized as a diagonal H-block with learnable weights `c^θ_k → 1/|k|²`.
 
 ```bash
-python save_fixed_poisson.py --N 64 --Kmax 21 --use_double
+python stream_block_train.py --mode train --model diag --N 64 --Kmax 21 \
+    --epochs 200 --use_double
 ```
-
-This saves a `FixedPoissonHamiltonian` checkpoint to `runs_poisson2d/poisson_fixed/`.
+Saves the best checkpoint (lowest test relative L² error) to `runs_poisson2d/poisson2d_diag/`.
 
 ### Step 3 — Run Strang rollout
 
@@ -192,7 +193,7 @@ This saves a `FixedPoissonHamiltonian` checkpoint to `runs_poisson2d/poisson_fix
 python ns2d_vorticity_with_blocks3_strang.py \
     --N 64 --Kmax 21 --nu 1e-4 --dt 1e-3 --n_steps 50000 \
     --laplace_model diag \
-    --poisson_model fixed \
+    --poisson_model diag \
     --use_double
 ```
 
@@ -202,7 +203,7 @@ The Strang macro-step is:
 ```
 where L is the exact-in-Fourier linear diffusion+forcing step and N is the pure advection step (RK2/Heun with pseudo-spectral evaluation).
 
-The script runs both a reference trajectory (exact operators) and a learned trajectory (learned Laplacian + learned/fixed Poisson), logs relative errors every 2000 steps, and saves comparison plots.
+The script runs both a reference trajectory (exact operators) and a learned trajectory (learned Laplacian + learned Poisson), logs relative errors every 2000 steps, and saves comparison plots.
 
 **Outputs** saved to `runs_ns2d_vort/<run_name>/`:
 - `omega_step00000_compare.png` — initial vorticity field
@@ -232,10 +233,10 @@ Place the provided checkpoint directories at:
 ```
 case2_ns/runs_laplace2d/laplace2d_diag/model_state.pt
 case2_ns/runs_laplace2d/laplace2d_diag/config.json
-case2_ns/runs_poisson2d/poisson_fixed/model_state.pt
-case2_ns/runs_poisson2d/poisson_fixed/config.json
+case2_ns/runs_poisson2d/poisson2d_diag/model_state.pt
+case2_ns/runs_poisson2d/poisson2d_diag/config.json
 ```
-Then run `save_fixed_poisson.py` once to regenerate the fixed Poisson block on your machine (it has no trainable weights — only the `config.json` structure matters), and run the NS rollout directly.
+Then run the NS rollout directly — both blocks will be auto-selected by `find_latest_model_dir()`.
 
 ---
 
@@ -254,8 +255,8 @@ Then run `save_fixed_poisson.py` once to regenerate the fixed Poisson block on y
 |------|----------|
 | `laplace2d_diag/model_state.pt` | `c` parameter (diagonal k² approximation) |
 | `laplace2d_diag/config.json` | `block`, `dim`, `scale`, `N`, `Kmax`, `best_epoch`, etc. |
-| `poisson_fixed/model_state.pt` | `inv_k2` buffer (exact 1/k² values, no trained weights) |
-| `poisson_fixed/config.json` | `block`, `dim`, `inv_k2_vec`, `N`, `Kmax`, etc. |
+| `poisson2d_diag/model_state.pt` | `raw` parameter (softplus-constrained diagonal weights c^θ) |
+| `poisson2d_diag/config.json` | `block`, `dim`, `scale`, `N`, `Kmax`, `inv_k2_vec` (true values stored for verification), etc. |
 
 ---
 
